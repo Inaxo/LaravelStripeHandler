@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<products>
+    <product>
+        <id>1</id>
+        <name>Product A</name>
+        <currency>USD</currency>
+        <unit_amount>1000</unit_amount>
+    </product>
+    <product>
+        <id>2</id>
+        <name>Product B</name>
+        <currency>EUR</currency>
+        <unit_amount>750</unit_amount>
+    </product>
+</products>

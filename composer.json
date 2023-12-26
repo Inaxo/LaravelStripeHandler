@@ -1,0 +1,20 @@
+{
+    "name": "inaxo/laravelstripehandler",
+    "description": "Laravel package that contains everything you need to implement a stripe payment gateway",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Inaxo\\Laravelstripehandler\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Inaxo",
+            "email": "Oliwier_glowala@tlen.pl"
+        }
+    ],
+    "require": {
+      "ext-simplexml": "*"
+    }
+}
