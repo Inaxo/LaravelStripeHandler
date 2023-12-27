@@ -14,6 +14,7 @@ class LaravelStripeHandlerServiceProvider extends ServiceProvider
             __DIR__ . '/../config/laravel_stripe_handler.php' => config_path('laravel_stripe_handler.php'),
         ], 'config');
         $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
+        $this->loadViewsFrom(__DIR__.'/views', 'LaravelStripeHandler');
     }
 
 

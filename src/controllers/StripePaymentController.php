@@ -27,10 +27,10 @@ class StripePaymentController extends Controller {
       return redirect()->away($session->url);
     }
     public function success(){
-        return view('welcome')->with(['message' => 'Payment Successful']);
+        return view('LaravelStripeHandler::payment-success');
     }
     public function cancel(){
-        return view('welcome')->with(['message' => 'Payment Cancelled']);
+        return view('LaravelStripeHandler::payment-cancel');
     }
 
     /**
