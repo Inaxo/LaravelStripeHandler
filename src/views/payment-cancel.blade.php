@@ -31,7 +31,7 @@
 <script>
     let paymentMessage = document.getElementById('payment-message');
 
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 8; i++) {
         setTimeout(() => {
             if (paymentMessage.textContent.length > 74) {
                 paymentMessage.textContent = 'Payment has been canceled. Please wait to be redirected to the main page';
@@ -39,7 +39,9 @@
             paymentMessage.textContent += '.';
         }, 1000 + (i * 1000));
     }
-
+    setTimeout(() => {
+        window.location.href = '/';
+    }, 8000);
 </script>
 </body>
 </html>
