@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -28,6 +29,9 @@
     <box-icon type='solid' name='error-alt' size="250px" color="red"></box-icon>
     <h2 id="payment-message" style="font-family: 'Poppins'">Payment has been canceled. Please wait to be redirected to the main page</h2>
 </div>
+
+
+
 <script>
     let paymentMessage = document.getElementById('payment-message');
 

@@ -1,36 +1,57 @@
 <?php
 namespace Inaxo\LaravelStripeHandler\controllers;
+use Faker\Factory;
 use Illuminate\Support\Facades\File;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Session;
 use SimpleXMLElement;
 use Stripe\Stripe;
 class StripePaymentController extends Controller {
 
     public function checkout(){
+        $id = 2;
+        $xml = $this->getProductFromXMLFile();
+        $products = json_decode($xml);
+        $lineItems = [];
+        foreach ($products->product as $product) {
+            if ($product->id == $id) {
+                $lineItems[] = [
+                    'price_data' => [
+                        'currency' => 'pln',
+                        'product_data' => [
+                            'name' => $product->name,
+                        ],
+                        'unit_amount' => $product->unit_amount,
+                    ],
+                    'quantity' => $product->quantity ?? 1,
+                ];
+            }else{
+                continue;
+            }
+        }
         Stripe::setApiKey(config('laravel_stripe_handler.secret_key'));
         $session = \Stripe\Checkout\Session::create([
         'payment_method_types' => ['card'],
-        'line_items' => [[
-          'price_data' => [
-            'currency' => 'pln',
-            'product_data' => [
-              'name' => 'Mózg dla Pana Skrzypczyka',
-            ],
-            'unit_amount' => 15000000,
-          ],
-          'quantity' => 1,
-        ]],
+        'line_items' => $lineItems,
         'mode' => 'payment',
         'success_url' => route('payment-success'),
         'cancel_url' => route('payment-cancel'),
       ]);
+        Session::put('sessionID', $session->id);
       return redirect()->away($session->url);
     }
     public function success(){
         return view('LaravelStripeHandler::payment-success');
     }
     public function cancel(){
-        return view('LaravelStripeHandler::payment-cancel');
+        if(Session::has('sessionID')){
+            Session::remove('sessionID');
+            return view('LaravelStripeHandler::payment-cancel');
+        }
+        else{
+           abort(403);
+        }
+
     }
 
     /**
@@ -38,6 +59,7 @@ class StripePaymentController extends Controller {
      */
     public function getProductFromXMLFile()
     {
+
         $directory = resource_path('LaravelStripeHandler');
         $filePath = $directory . '/products.xml';
 
