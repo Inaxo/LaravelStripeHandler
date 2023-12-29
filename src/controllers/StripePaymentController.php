@@ -8,8 +8,8 @@ use SimpleXMLElement;
 use Stripe\Stripe;
 class StripePaymentController extends Controller {
 
-    public function checkout(){
-        $id = 2;
+    public function checkout($productID){
+        $id = $productID;
         $xml = $this->getProductFromXMLFile();
         $products = json_decode($xml);
         $lineItems = [];
