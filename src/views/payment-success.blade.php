@@ -31,10 +31,10 @@
 
 <script>
     let paymentMessage = document.getElementById('payment-message');
-
+    let paymentMessageLength = paymentMessage.textContent.length;
     for (let i = 0; i < 8; i++) {
         setTimeout(() => {
-            if (paymentMessage.textContent.length > 79) {
+            if (paymentMessage.textContent.length > paymentMessageLength + 2) {
                 paymentMessage.textContent = 'Payment completed successfully. Please wait to be redirected to the main page';
             }
             paymentMessage.textContent += '.';

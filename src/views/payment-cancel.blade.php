@@ -30,14 +30,12 @@
     <h2 id="payment-message" style="font-family: 'Poppins'">Payment has been canceled. Please wait to be redirected to the main page</h2>
 </div>
 
-
-
 <script>
     let paymentMessage = document.getElementById('payment-message');
-
+    let paymentMessageLength = paymentMessage.textContent.length;
     for (let i = 0; i < 8; i++) {
         setTimeout(() => {
-            if (paymentMessage.textContent.length > 74) {
+            if (paymentMessage.textContent.length > paymentMessageLength + 2) {
                 paymentMessage.textContent = 'Payment has been canceled. Please wait to be redirected to the main page';
             }
             paymentMessage.textContent += '.';
@@ -46,6 +44,8 @@
     setTimeout(() => {
         window.location.href = '/';
     }, 8000);
+
 </script>
+
 </body>
 </html>

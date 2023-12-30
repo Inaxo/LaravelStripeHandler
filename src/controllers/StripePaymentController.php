@@ -40,7 +40,7 @@ class StripePaymentController extends Controller {
         Session::put('sessionID', $session->id);
       return redirect()->away($session->url);
     }
-    public function success(){
+    public function success(){ //Here you can add your own logic for example: to save order in database
         return view('LaravelStripeHandler::payment-success');
     }
     public function cancel(){
