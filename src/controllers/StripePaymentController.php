@@ -1,6 +1,7 @@
 <?php
 namespace Inaxo\LaravelStripeHandler\controllers;
 use Faker\Factory;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
@@ -37,14 +38,23 @@ class StripePaymentController extends Controller {
         'success_url' => route('payment-success'),
         'cancel_url' => route('payment-cancel'),
       ]);
-        Session::put('sessionID', $session->id);
+        Session::put('StripeSession', $session);
+        Session::put('LineItems', $lineItems);
       return redirect()->away($session->url);
     }
     public function success(){ //Here you can add your own logic for example: to save order in database
+        $stripeSession = Session::get('StripeSession');
+        $lineItems = Session::get('LineItems');
+
+
+
+
+
+        Session::flush();
         return view('LaravelStripeHandler::payment-success');
     }
     public function cancel(){
-        if(Session::has('sessionID')){
+        if(Session::has('StripeSession')){
             Session::remove('sessionID');
             return view('LaravelStripeHandler::payment-cancel');
         }
