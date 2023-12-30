@@ -56,7 +56,7 @@ class StripePaymentController extends Controller {
     public function cancel(){
         if(Session::has('StripeSession')){
             Session::remove('sessionID');
-            return view('LaravelStripeHandler::payment-cancel');
+            return view('LaravelStripeHandler::payment-cancel')->with(['home_route' => config('laravel_stripe_handler.home_route')]);
         }
         else{
            abort(403);
