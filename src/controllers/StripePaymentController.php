@@ -65,25 +65,25 @@ class StripePaymentController extends Controller {
 
     }
 
-    /**
-     * @throws \Exception
-     */
     public function getProductFromXMLFile()
     {
+        try {
+            $directory = resource_path('LaravelStripeHandler');
+            $filePath = $directory . '/products.xml';
 
-        $directory = resource_path('LaravelStripeHandler');
-        $filePath = $directory . '/products.xml';
+            if (!File::exists($directory)) {
+                File::makeDirectory($directory);
+            }
 
-        if (!File::exists($directory)) {
-            File::makeDirectory($directory);
+            if (!File::exists($filePath)) {
+                File::put($filePath, '');
+            }
+
+            $xmlContent = file_get_contents($filePath) ?? throw new \Exception('Unable to read XML file: $filePath');
+            $xml = new SimpleXMLElement($xmlContent);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage(), 500]);
         }
-
-        if (!File::exists($filePath)) {
-            File::put($filePath, '');
-        }
-
-        $xmlContent = file_get_contents($filePath);
-        $xml = new SimpleXMLElement($xmlContent);
         return json_encode($xml);
     }
 
