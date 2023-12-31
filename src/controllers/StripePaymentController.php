@@ -51,11 +51,12 @@ class StripePaymentController extends Controller {
 
 
         Session::flush();
-        return view('LaravelStripeHandler::payment-success');
+        return view('LaravelStripeHandler::payment-success')->with(['home_route' => config('laravel_stripe_handler.home_route')]);
+
     }
     public function cancel(){
         if(Session::has('StripeSession')){
-            Session::remove('sessionID');
+            Session::flush();
             return view('LaravelStripeHandler::payment-cancel')->with(['home_route' => config('laravel_stripe_handler.home_route')]);
         }
         else{
@@ -85,5 +86,6 @@ class StripePaymentController extends Controller {
         $xml = new SimpleXMLElement($xmlContent);
         return json_encode($xml);
     }
+
 
 }

@@ -42,7 +42,7 @@
         }, 1000 + (i * 1000));
     }
     setTimeout(() => {
-        window.location.href = '{{ route("home") }}';
+        window.location.href = '{{ $home_route }}';
     }, 8000);
 
 </script>
