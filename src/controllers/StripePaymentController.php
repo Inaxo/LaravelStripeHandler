@@ -1,7 +1,6 @@
 <?php
 namespace Inaxo\LaravelStripeHandler\controllers;
 use Exception;
-use Faker\Factory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use App\Http\Controllers\Controller;
