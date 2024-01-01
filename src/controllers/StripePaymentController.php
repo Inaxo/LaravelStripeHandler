@@ -16,6 +16,8 @@ class StripePaymentController extends Controller {
     const CURRENCY_CONFIG_KEY = 'laravel_stripe_handler.currency';
     const SECRET_KEY_CONFIG_KEY = 'laravel_stripe_handler.secret_key';
     const HOME_ROUTE_CONFIG_KEY = 'laravel_stripe_handler.home_route';
+    const FILE_FORMAT_CONFIG_KEY = 'laravel_stripe_handler.file_format';
+
 
     public function checkout($productID){
 
@@ -25,22 +27,32 @@ class StripePaymentController extends Controller {
         if ($validator->fails()) {
             abort(403, 'Invalid product ID');
         }
-        $xml = $this->getProductFromXMLFile();
-        $products = json_decode($xml);
+        $productsFileContent = $this->getProductsFileContent();
+        switch(config(self::FILE_FORMAT_CONFIG_KEY)){
+            case 'xml':
+                $products = new SimpleXMLElement($productsFileContent);
+                $products = json_decode(json_encode($products), true);
+                break;
+            case 'json':
+                $products = json_decode($productsFileContent);
+                break;
+            default:
+                abort(403, 'Invalid file format');
+        }
         $lineItems = [];
-        foreach ($products->product as $product) {
-            if ($product->id == $productID) {
+        foreach ($products['product'] as $product) {
+            if ($product['id'] == $productID) {
                 $lineItems[] = [
                     'price_data' => [
                         'currency' => config(self::CURRENCY_CONFIG_KEY),
                         'product_data' => [
-                            'name' => $product->name,
+                            'name' => $product['name'],
                         ],
-                        'unit_amount' => $product->unit_amount,
+                        'unit_amount' => $product['unit_amount'],
                     ],
-                    'quantity' => $product->quantity ?? 1,
+                    'quantity' => $product['quantity'] ?? 1,
                 ];
-            }else{
+            } else {
                 continue;
             }
         }
@@ -80,11 +92,11 @@ class StripePaymentController extends Controller {
     /**
      * @throws    Exception
      */
-    public function getProductFromXMLFile()
+    public function getProductsFileContent()
     {
         try {
             $directory = resource_path('LaravelStripeHandler');
-            $filePath = $directory . '/products.xml';
+            $filePath = $directory . '/products.' . config(self::FILE_FORMAT_CONFIG_KEY);
 
             if (!File::exists($directory)) {
                 File::makeDirectory($directory);
@@ -94,17 +106,15 @@ class StripePaymentController extends Controller {
                 File::put($filePath, '');
             }
 
-            $xmlContent = file_get_contents($filePath) ?? throw new Exception('Unable to read XML file: $filePath');
-            $xml = new SimpleXMLElement($xmlContent);
-            if (!$xml) {
+            $fileContent = file_get_contents($filePath) ?? throw new Exception('Unable to read file: $filePath');
+            if (!$fileContent) {
                 throw new Exception('Error parsing XML file: ' . $filePath);
             }
         } catch (Exception $e) {
             Log::error('Error in getProductFromXMLFile: ' . $e->getMessage());
             throw $e;
         }
-        return json_encode($xml);
+        return $fileContent;
     }
-
 
 }
