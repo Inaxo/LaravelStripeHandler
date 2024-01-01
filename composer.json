@@ -3,6 +3,8 @@
     "description": "Laravel package that contains everything you need to implement a stripe payment gateway",
     "type": "library",
     "license": "MIT",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "Inaxo\\Laravelstripehandler\\": "src/"
